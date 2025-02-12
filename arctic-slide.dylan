@@ -1,13 +1,19 @@
-module: arctic-slide
-synopsis: experimental gameplay from the Polar Macintosh game by Go Endo
-author: Paul R. Potts
-copyright: placed in the Public Domain
+Module: arctic-slide
 
-// For code to be pasted into preformatted code blocks in my
-// blogger blog at 860 pixels wide for the blog body,  I have a
-// maximum of 67 chars per line to work with. I've upped this to
-// 960 which gives me just over 80 chars. Here are guides for 67
-// and 80:
+// Experimental gameplay from the Polar Macintosh game by Go Endo
+// This is a personal project I wrote to study object-oriented
+// design using generic functions and multiple dispatch, aka
+// "multimethods." https://en.wikipedia.org/wiki/Multiple_dispatch
+
+// For an explanation of my design, see:
+// https://thepottshouse.org/paul/portfolio/The_Polar_Game_in_Dylan.html
+
+// Formatting notes: this code is formatted so that I could paste
+// it into preformatted code blocks in Blogger blog posts. I have
+// been migrating all my work out of Blogger and putting it in my
+// own web archive, but my own web page style sheets still impose
+// limitations on the width of code that works properly in HTML or
+// For reference here are guides for 67 and 80 columns:
 //
 //34567890123456789012345678901234567890123456789012345678901234567
 //345678901234567890123456789012345678901234567890123456789012345678901234567890
@@ -113,7 +119,7 @@ define method slide( model :: <model>, dir :: <dir>,
     movable-pos :: <pos>, movable-tile :: <movable>,
     next-pos :: <pos>, next-tile :: <empty> )
     format-out( "slide: movable / empty\n" );
-    force-output( *standard-output* );
+    force-out();
     let next-next-pos :: <pos-or-false> =
         getAdjacentPos( next-pos, dir );
     let next-next-tile = getTileAtPos( model, next-next-pos );
@@ -129,7 +135,7 @@ define method slide( model :: <model>, dir :: <dir>,
     movable-pos :: <pos>, movable-tile :: <movable>,
     next-pos :: <pos-or-false>, next-tile :: <blocking> )
     format-out( "slide: movable / blocking, calling collide\n" );
-    force-output( *standard-output* );
+    force-out();
     collide( model, dir, movable-pos, movable-tile,
               next-pos, next-tile );
 end;
@@ -142,7 +148,7 @@ define method slide( model :: <model>, dir :: <dir>,
     ice-block-pos :: <pos>, ice-block-tile :: <ice-block>,
     next-pos :: <pos-or-false>, next-tile :: <blocking> )
     format-out( "slide: ice block / blocking\n" );
-    force-output( *standard-output* );
+    force-out();
 end;
 
 // collide handles interactions between pushed or
@@ -169,7 +175,7 @@ define method collide( model :: <model>, dir :: <dir>,
     movable-pos :: <pos>, movable-tile :: <movable>,
     next-pos :: <pos>, next-tile :: <empty> )
     format-out( "collide: movable / empty\n" );
-    force-output( *standard-output* );
+//    force-out();
     slide ( model, dir, movable-pos, movable-tile,
             next-pos, next-tile );
 end;
@@ -181,7 +187,7 @@ define method collide( model :: <model>, dir :: <dir>,
     icebreaking-pos :: <pos-or-false>,
     ice-breaking-tile :: <blocking> )
     format-out( "collide: ice-block / blocking\n" );
-    force-output( *standard-output* );
+    force-out();
     setTileAtPos( model, ice-block-pos, $the-empty );
 end;
 
@@ -192,7 +198,7 @@ define method collide( model :: <model>, dir :: <dir>,
     heart-pos :: <pos>, heart-tile :: <heart>,
     house-pos :: <pos>, house-tile :: <house> )
     format-out( "collide: heart / house\n" );
-    force-output( *standard-output* );
+//    force-out();
     setTileAtPos( model, heart-pos, $the-empty );
     decrementHeartCount( model );
 end;
@@ -203,7 +209,7 @@ define method collide( model :: <model>, dir :: <dir>,
     bomb-pos :: <pos>, bomb-tile :: <bomb>,
     mountain-pos :: <pos>, mountain-tile :: <mountain> )
     format-out( "collide: bomb / mountain\n" );
-    force-output( *standard-output* );
+    force-out();
     setTileAtPos( model, bomb-pos, $the-empty );
     setTileAtPos( model, mountain-pos, $the-empty );
 end;
@@ -215,7 +221,7 @@ define method collide( model :: <model>, dir :: <dir>,
     movable-pos :: <pos>, movable-tile :: <movable>,
     blocking-pos :: <pos-or-false>, blocking-tile :: <blocking> )
     format-out( "collide: movable / blocking \n" );
-    force-output( *standard-output* );
+    force-out();
 end;
 
 // pushTile represents the penguin (player avatar)
@@ -233,7 +239,7 @@ define method pushTile( model :: <model>, dir :: <dir>,
     target-pos :: <pos>, target-tile :: <walkable> )
     => ( result :: <boolean> )
     format-out( "pushTile: walkable\n" );
-    force-output( *standard-output* );
+    force-out();
     model.penguin-pos := target-pos;
     #t;
 end;
@@ -244,7 +250,7 @@ define method pushTile( model :: <model>, dir :: <dir>,
     target-pos :: <pos>, target-tile :: <movable> )
     => ( result :: <boolean> )
     format-out( "pushTile: movable\n" );
-    force-output( *standard-output* );
+    force-out();
     let next-pos :: <pos-or-false>  =
         getAdjacentPos( target-pos, dir );
     let next-tile = getTileAtPos ( model, next-pos );
@@ -259,7 +265,7 @@ define method pushTile( model :: <model>, dir :: <dir>,
     target-pos :: <pos-or-false>, target-tile :: <fixed> )
     => ( result :: <boolean> )
     format-out( "pushTile: fixed\n" );
-    force-output( *standard-output* );
+    force-out();
     #f;
 end;
 
@@ -309,7 +315,7 @@ end;
 define method setTileAtPos( model :: <model>, pos, tile :: <tile> )
     format-out( "setTileAtPos: [ %d, %d ]: %S\n",
         pos.y-idx, pos.x-idx, tile );
-    force-output( *standard-output* );
+    force-out();
     setTileAtXY( model, pos.y-idx, pos.x-idx, tile );
 end;
 
@@ -330,16 +336,16 @@ define method penguinMove( model :: <model>, dir :: <dir> )
     if ( model.penguin-dir ~= dir )
         model.penguin-dir := dir;
         format-out( "Penguin changed dir to %S\n", dir );
-        force-output( *standard-output* );
+        force-out();
     else
         if ( penguinPush( model ) )
             format-out ( "Penguin moved to %d, %d\n",
                 model.penguin-pos.y-idx, model.penguin-pos.x-idx );
-            force-output( *standard-output* );
+            force-out();
         end if;
         if ( model.heart-count == 0 )
             format-out( "Heart count reached zero, level cleared!\n" );
-            force-output( *standard-output* );
+            force-out();
         end if;
     end if;
 end;
@@ -399,10 +405,12 @@ define method describe-board( model :: <model> )
         end for;
         format-out( "\n" );
     end for;
-    force-output( *standard-output* );
+    force-out();
 end;
 
-define function main (name :: <string>, arguments :: <vector>)
+define function main
+    (name :: <string>, arguments :: <vector>)
+    format-out("Testing the arctic-slide game mechanics with test board 1\n");
 
     let model :: <model> = make( <model>, y-idx: 0, x-idx: 0 );
     init( model );
@@ -477,6 +485,8 @@ define function main (name :: <string>, arguments :: <vector>)
     describe-board( model );
 
     exit-application(0);
-end;
+end function;
 
+// Calling our top-level function (which may have any name) is the last
+// thing we do.
 main(application-name(), application-arguments());

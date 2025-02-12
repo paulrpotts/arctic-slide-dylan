@@ -1,53 +1,167 @@
-About the Dylan Code
+# About This Project
 
 This is an implementation, in Dylan, of the core game logic from the
 old Macintosh Polar game. See:
 
-http://praisecurseandrecurse.blogspot.com/2013/06/dispatch-for-polar-game-in-dylan.html
+https://thepottshouse.org/paul/portfolio/The_Polar_Game_in_Dylan.html
 
 I wrote it for learning and experimental purposes, to test the current
-OpenDylan compiler and runtime and to consider some design alternatives.
-You are free to use it in any way that seems right to you, but please
-notice possible intellectual property issues described below.
+OpenDylan compiler and runtime, and to consider some design alternatives.
+You are free to use it in any way that seems right to you, as far as I'm
+concerned, but please make note of possible intellectual property issues.
 
-About the iOS Code
+Many years ago there existed on old-school MacOS a small game called
+"Polar." It was a very simple game, written by a guy (Go Endo) who may
+have been a student at the same time I was a student. It was so simple,
+but I was fond of it --- fond to save it for many years with the
+intention of studying its design and gameplay and perhaps attempting
+to re-implement it.
 
-This is a reverse-engineered implementation of the old Macintosh Polar
-game, something I saved since my college days. Right now it is just the
-"back end" code for iOS, but has no GUI. I am working on a GUI as time
-allows. For details see my blog:
+The original game had a copyright notice (1990), and was shareware
+($2.00). From what I can tell, Polar was never popular and the Internet
+seems to have largely forgotten it, which is unjust, in my opionion,
+because it is a very clever and fun little game.
 
-http://praisecurseandrecurse.blogspot.com/2013/06/objective-c-day-3.html
+I'm not sure how the original author would feel about me taking apart
+and trying to re-implement his game, or whether they would try to assert
+that intellectual property law prevented me from doing so, but I've been
+assuming that they do not care, especially given that it is 35 years
+later, I'm not attempting to make any money on this effort, and in this
+case especially, is easier to ask forgiveness than permission.
 
-I wrote "Many years ago there existed on old-school MacOS a small game
-called "Polar." It was a very simple game, written by a guy (Go Endo)
-who was probably a student at the time, but I was fond of it -- fond
-enough to save it for 23 years, with the intention of studying its
-design and re-implementing it in the future."
+I am not a lawyer, but I believe Go Endo could still have a valid
+copyright claim to his implementation, including his original graphics
+and text. Does that forbid anyone else from reproducing the game's
+play mechanics or level design? I don't know. If you plan to try to turn
+this into a finished game, I recommend consulting an attorney who can
+advise you on intellectual property issues.
 
-I further noted that "the original game had a copyright notice (1990),
-and was shareware ($2.00). I can't remember if I ever sent the author
-$2.00."
+# Building and Running the Code with Open Dylan
 
-[He certainly deserved it, and more, for the amount of entertainment
-I got out of his challenging puzzles! From what I can tell, Polar was
-never popular and has largely been forgotten -- undeservedly so, in
-my opinion, because it is extremely clever.]
+I have tested this most recently with the 2024 release of OpenDylan
+running on Ubuntu Linux 22.04.5 "Jammy Jellyfish," on an Intel NUC with
+an i5 CPU. I am grateful as always to the work of the many volunteers
+who have, over the years, continued to keep it possible to build and
+run Dylan code.
 
-I continued "I'm not sure how he would feel about me taking apart and
-trying to re-implement his game, or whether he'd try to assert that
-copyright prevented me from doing so, but I'll assume he's a nice guy
-and wouldn't care as long as I don't charge for it, and go ahead, on
-the theory that easier to ask forgiveness than permission."
+OpenDylan's build system does not seem to be very GitHub-friendly at
+the moment. By that I mean that I would like to commit and push only a
+minimal set of source files necessary for building the project, so that
+other programmers can clone the repo and build it. I don't want to push
+directories full of build products. But the tools now do not seem to
+offer an easy way to just pull down a .dylan file and a few other text
+files containing metadata and build it. Instead, the only documented
+path I could find is to use the tools to build an empty starter project
+and then modify it.
 
-I am not a lawyer, but I believe Mr. Endo has a valid copyright claim
-to his implementation, including his original graphics and text. I do
-not believe that copyright necessarily protects gameplay mechanics or
-level design, but remember that part where I said I am not a lawyer?
+So, I recommend doing these steps, which worked for me (LOL):
 
-Along with my code, I have uploaded several screen shots. These are
-not intended to violate Mr. Endo's copyright. They are there for
-reference.
+## Set Up OpenDylan
 
-My ultimate intent is to release this as a free game in the App Store,
-with redrawn graphics, as an homage to Mr. Endo's original.
+Get OpenDylan installed on your machine and set up in your PATH. See:
+https://opendylan.org/index.html
+
+In my case, I put everything from the bzip2 file into
+
+/opt/opendylan-2024.1
+
+and then added
+
+export PATH=/opt/opendylan-2024.1/bin:$PATH
+
+to my ~/.bashrc file.
+
+Now if I type dylan-compiler -version
+
+I get "Version 2024.1."
+
+## Pull Down My Source
+
+Use git clone for this.
+
+## Make a Starter Dylan Project
+
+Working in your arctic-slide-dylan sanbox, run:
+
+dylan new application arctic-slide-od
+
+This will create an arctic-slide-od directory with _packages, registry, and
+tests sub-directories, create some boilerplate code files, download some packages,
+etc. It shouldn't modify my source files.
+
+## Build and Run the Starter Project
+
+Verify that you can build and run the starter project before making any changes
+to it. 
+
+cd arctic-slide-od
+
+dylan build --all
+
+The first build will take a while. I get a number of warnings about "multiple
+applicable copy-down methods" as the standard libraries are build. It would be
+nice if these weren't there, but I don't think they are critical.
+
+After it's done, you should be able to run the executable:
+
+_build/bin/arctic-slide-od-app
+
+All it does is print "Hello world!"
+
+## Modify arctic-slide-od-app.dylan
+
+Now, REPLACE everything after the first line of
+
+arctic-slide-od-app.dylan
+
+with everything after the first line of the original file
+
+arctic-slide.dylan
+
+When you're done, the first line should still read:
+
+Module: arctic-slide-od-app
+
+Make sure you only have that first Module: line, or the
+code won't build.
+
+### Build Again and Run
+
+Now you should be able to perform the build again:
+
+dylan build --all
+
+The build should be much faster this time. Then, run the
+application containing my code:
+
+_build/bin/arctic-slide-od-app
+
+You should see output that starts like this:
+
+    Testing the arctic-slide game mechanics with test board 1
+    tre ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ tre ___ ___ ___ ___ ___ ice ___ ___ 
+    tre ___ bom ___ mtn ___ hea ice hea ___ ___ ___ ___ ___ ___ ___ ___ ___ tre ___ ___ tre ___ ___ 
+    tre ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ hea ___ ___ ___ mtn hou ___ ___ 
+    tre tre ___ ___ ___ ___ tre ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ 
+    Penguin changed dir to east
+    pushTile: walkable
+    Penguin moved to 0, 1
+
+and ends like this:
+
+    Heart count reached zero, level cleared!
+    tre ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ tre ice ___ ___ ___ ___ ___ ___ ___ 
+    tre ___ ___ ___ mtn ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ tre ___ ___ tre ___ ___ 
+    tre ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ hou ___ ___ 
+    tre tre ___ ___ ___ ___ tre ice ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ 
+
+There is no graphical user interface at present, just a log of the code playing
+the first level of the game by itself, as this project was originally all about
+studying possible implementations of the game mechanics. This allowed me to make
+small changes to the generic functions and quickly test whether the game still
+works as expected. The game board map shows the positions of trees, bombs,
+mountains, hearts, ice blocks, and the house. It does not currently show the
+position of the penguin, although now that I think of it, that would be a nice
+upgrade. A GUI would make a nice upgrade as well!
+
+Happy programming!
