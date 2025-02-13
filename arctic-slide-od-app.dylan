@@ -175,7 +175,7 @@ define method collide( model :: <model>, dir :: <dir>,
     movable-pos :: <pos>, movable-tile :: <movable>,
     next-pos :: <pos>, next-tile :: <empty> )
     format-out( "collide: movable / empty\n" );
-//    force-out();
+    force-out();
     slide ( model, dir, movable-pos, movable-tile,
             next-pos, next-tile );
 end;
@@ -198,7 +198,7 @@ define method collide( model :: <model>, dir :: <dir>,
     heart-pos :: <pos>, heart-tile :: <heart>,
     house-pos :: <pos>, house-tile :: <house> )
     format-out( "collide: heart / house\n" );
-//    force-out();
+    force-out();
     setTileAtPos( model, heart-pos, $the-empty );
     decrementHeartCount( model );
 end;
