@@ -47,14 +47,13 @@ run Dylan code.
 OpenDylan's build system does not seem to be very GitHub-friendly at
 the moment. By that I mean that I would like to commit and push only a
 minimal set of source files necessary for building the project, so that
-other programmers can clone the repo and build it. I don't want to push
-directories full of build products. But the tools now do not seem to
-offer an easy way to just pull down a .dylan file and a few other text
-files containing metadata and build it. Instead, the only documented
-path I could find is to use the tools to build an empty starter project
-and then modify it.
+other programmers can clone the repo and then simply build it. I don't
+want to push directories full of build products. The tools now do not
+seem to offer an easy way to just pull down a .dylan file and build it.
+Instead, the only documented path I could find is to use the tools to
+build an empty starter project, and then modify it.
 
-So, I recommend doing these steps, which worked for me (LOL):
+So, I recommend doing these steps:
 
 ## Set Up OpenDylan
 
@@ -87,7 +86,7 @@ dylan new application arctic-slide-od
 
 This will create an arctic-slide-od directory with _packages, registry, and
 tests sub-directories, create some boilerplate code files, download some packages,
-etc. It shouldn't modify my source files.
+etc. It shouldn't modify my files.
 
 ## Build and Run the Starter Project
 
@@ -110,20 +109,12 @@ All it does is print "Hello world!"
 
 ## Modify arctic-slide-od-app.dylan
 
-Now, REPLACE everything after the first line of
+Now, REPLACE the generated
 
 arctic-slide-od-app.dylan
 
-with everything after the first line of the original file
-
-arctic-slide.dylan
-
-When you're done, the first line should still read:
-
-Module: arctic-slide-od-app
-
-Make sure you only have that first Module: line, or the
-code won't build.
+file in the arctic-slide-od directory with my file of the
+same name.
 
 ### Build Again and Run
 

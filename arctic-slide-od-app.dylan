@@ -1,4 +1,4 @@
-Module: arctic-slide
+Module: arctic-slide-od-app
 
 // Experimental gameplay from the Polar Macintosh game by Go Endo
 // This is a personal project I wrote to study object-oriented
